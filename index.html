@@ -13,6 +13,147 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <style>
+/* Improved search dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--dark-3);
+  border: 1px solid rgba(0,87,255,0.3);
+  border-radius: var(--radius);
+  padding: 8px 0;
+  display: none;
+  z-index: 200;
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-dropdown.show { 
+  display: block; 
+}
+
+.search-result-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--gray-200);
+  transition: var(--transition);
+  display: flex; 
+  align-items: center; 
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover { 
+  background: rgba(0,87,255,0.15); 
+  color: var(--white); 
+}
+
+/* Scrollbar for dropdown */
+.search-dropdown::-webkit-scrollbar {
+  width: 4px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 2px;
+}
+
+
+  /* Fix modal to be full screen */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--dark-2);
+  border: 1px solid rgba(0,87,255,0.2);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  max-width: 90%;
+  width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+.modal-overlay.show .modal {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  background: var(--dark-2);
+  z-index: 1;
+  padding-bottom: 10px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  font-size: 28px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+}
+
+/* Fix for product detail modal content */
+#modalBody {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+#modalBody::-webkit-scrollbar {
+  width: 4px;
+}
+
+#modalBody::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 2px;
+}
 :root {
   --blue: #0057FF;
   --blue-bright: #2979FF;
@@ -1430,14 +1571,13 @@ footer {
         <div class="logo-sub">Tijuana, BC</div>
       </div>
     </a>
-    <ul class="nav-links">
-      <li><a href="#inicio">Inicio</a></li>
-      <li><a href="#categorias">Categorías</a></li>
-      <li><a href="#productos">Productos</a></li>
-      <li><a href="#calculadora">Calculadora Solar</a></li>
-      <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#contacto">Contacto</a></li>
-    </ul>
+   <ul class="nav-links">
+  <li><a href="#inicio">Inicio</a></li>
+  <li><a href="#productos">Productos</a></li>
+  <li><a href="#calculadora">Calculadora Solar</a></li>
+  <li><a href="#nosotros">Nosotros</a></li>
+  <li><a href="#contacto">Contacto</a></li>
+</ul>
     <div class="nav-right">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
@@ -1464,13 +1604,12 @@ footer {
     <div class="logo-text" style="font-family:var(--font-display);font-size:24px;font-weight:700;">Volt<span style="color:var(--electric);">TJ</span></div>
   </div>
   <ul>
-    <li><a href="#inicio" onclick="closeMobileNav()">🏠 Inicio</a></li>
-    <li><a href="#categorias" onclick="closeMobileNav()">📦 Categorías</a></li>
-    <li><a href="#productos" onclick="closeMobileNav()">🛍️ Productos</a></li>
-    <li><a href="#calculadora" onclick="closeMobileNav()">☀️ Calculadora Solar</a></li>
-    <li><a href="#nosotros" onclick="closeMobileNav()">ℹ️ Nosotros</a></li>
-    <li><a href="#contacto" onclick="closeMobileNav()">📞 Contacto</a></li>
-  </ul>
+  <li><a href="#inicio" onclick="closeMobileNav()">🏠 Inicio</a></li>
+  <li><a href="#productos" onclick="closeMobileNav()">🛍️ Productos</a></li>
+  <li><a href="#calculadora" onclick="closeMobileNav()">☀️ Calculadora Solar</a></li>
+  <li><a href="#nosotros" onclick="closeMobileNav()">ℹ️ Nosotros</a></li>
+  <li><a href="#contacto" onclick="closeMobileNav()">📞 Contacto</a></li>
+</ul>
   <div style="margin-top:24px;">
     <a href="https://wa.me/526611282417" style="display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;">
       <span style="font-size:20px;">📱</span> WhatsApp: 661 128 2417
@@ -1570,79 +1709,6 @@ footer {
   </div>
 </div>
 
-<!-- CATEGORIES -->
-<section id="categorias">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <div class="section-tag">Catálogo</div>
-      <h2 class="section-title">Nuestras <span class="accent">Categorías</span></h2>
-      <p class="section-sub">Desde energía solar hasta electrónica de consumo, tenemos todo lo que necesitas.</p>
-    </div>
-    <div class="categories-grid">
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Solar')">
-        <span class="cat-icon">☀️</span>
-        <div class="cat-name">Paneles Solares</div>
-        <div class="cat-desc">Monocristalinos, policristalinos y bifaciales de alta eficiencia</div>
-        <span class="cat-count">12 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Microinversores')">
-        <span class="cat-icon">⚡</span>
-        <div class="cat-name">Microinversores</div>
-        <div class="cat-desc">Enphase, APsystems y más para máximo rendimiento por panel</div>
-        <span class="cat-count">8 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Baterías')">
-        <span class="cat-icon">🔋</span>
-        <div class="cat-name">Baterías</div>
-        <div class="cat-desc">Almacenamiento LiFePO4 y litio para autonomía total</div>
-        <span class="cat-count">6 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Seguridad')">
-        <span class="cat-icon">📡</span>
-        <div class="cat-name">Cámaras IP</div>
-        <div class="cat-desc">Bullet, domo y PTZ con IA integrada de Hikvision y Dahua</div>
-        <span class="cat-count">15 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Seguridad')">
-        <span class="cat-icon">🖥️</span>
-        <div class="cat-name">DVR / NVR</div>
-        <div class="cat-desc">Grabadores 4K de 4 a 32 canales con almacenamiento incluido</div>
-        <span class="cat-count">10 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Solar')">
-        <span class="cat-icon">💡</span>
-        <div class="cat-name">Iluminación LED</div>
-        <div class="cat-desc">Luminarias solares para exterior, jardín e industrial</div>
-        <span class="cat-count">9 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Inversores')">
-        <span class="cat-icon">🔌</span>
-        <div class="cat-name">Inversores Híbridos</div>
-        <div class="cat-desc">String e híbridos con monitoreo en app para hogar y empresa</div>
-        <span class="cat-count">7 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Accesorios')">
-        <span class="cat-icon">🛠️</span>
-        <div class="cat-name">Estructuras y Accesorios</div>
-        <div class="cat-desc">Montajes de aluminio, cable solar, conectores MC4 y más</div>
-        <span class="cat-count">20 productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Electrónica')">
-        <span class="cat-icon">📱</span>
-        <div class="cat-name">Electrónica General</div>
-        <div class="cat-desc">Gadgets, componentes, herramientas y electrónica de consumo</div>
-        <span class="cat-count">30+ productos</span>
-      </a>
-      <a href="#productos" class="cat-card reveal" onclick="filterProducts('Solar')">
-        <span class="cat-icon">📊</span>
-        <div class="cat-name">Monitoreo y Data</div>
-        <div class="cat-desc">Dataloggers, medidores de energía y sistemas SCADA</div>
-        <span class="cat-count">5 productos</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- PRODUCTS -->
 <section id="productos">
   <div class="section-inner">
@@ -1651,16 +1717,29 @@ footer {
       <h2 class="section-title">Productos <span class="accent">Destacados</span></h2>
       <p class="section-sub">Los más vendidos, mejor calificados y con mejor relación precio-valor del mercado.</p>
     </div>
-    <div class="product-filters" id="productFilters">
-      <button class="filter-btn active" onclick="filterProducts('Todos')">Todos</button>
-      <button class="filter-btn" onclick="filterProducts('Solar')">☀️ Solar</button>
-      <button class="filter-btn" onclick="filterProducts('Microinversores')">⚡ Microinversores</button>
-      <button class="filter-btn" onclick="filterProducts('Seguridad')">📡 Seguridad</button>
-      <button class="filter-btn" onclick="filterProducts('Baterías')">🔋 Baterías</button>
-      <button class="filter-btn" onclick="filterProducts('Inversores')">🔌 Inversores</button>
-      <button class="filter-btn" onclick="filterProducts('Accesorios')">🛠️ Accesorios</button>
-      <button class="filter-btn" onclick="filterProducts('Ofertas')">🏷️ Ofertas</button>
+    
+    <!-- NUEVA CAJA DE BÚSQUEDA AQUÍ -->
+    <div class="search-section" style="margin-bottom: 30px; text-align: center;">
+      <div style="max-width: 600px; margin: 0 auto; position: relative;">
+        <input type="text" id="searchInputProducts" placeholder="🔍 Buscar microinversores, cámaras, baterías..." 
+               style="width: 100%; padding: 15px 20px; border-radius: 50px; border: 2px solid rgba(0,87,255,0.3); 
+                      background: var(--dark-3); color: var(--white); font-size: 16px;">
+        <button onclick="performSearch()" 
+                style="position: absolute; right: 5px; top: 5px; background: var(--blue); color: white; 
+                       border: none; border-radius: 50px; padding: 10px 25px; font-weight: 600; cursor: pointer;">
+          Buscar
+        </button>
+      </div>
+      <div style="margin-top: 10px; font-size: 13px; color: var(--gray-400);">
+        Búsquedas populares: 
+        <a href="javascript:void(0);" onclick="performSearch('microinversores'); return false;" style="color: var(--electric); text-decoration: underline; cursor: pointer;">Microinversores</a> • 
+        <a href="javascript:void(0);" onclick="performSearch('cámaras'); return false;" style="color: var(--electric); text-decoration: underline; cursor: pointer;">Cámaras</a> • 
+        <a href="javascript:void(0);" onclick="performSearch('paneles solares'); return false;" style="color: var(--electric); text-decoration: underline; cursor: pointer;">Paneles Solares</a> • 
+        <a href="javascript:void(0);" onclick="performSearch('baterías'); return false;" style="color: var(--electric); text-decoration: underline; cursor: pointer;">Baterías</a>
+      </div>
     </div>
+    
+    <div class="product-filters" id="productFilters"></div>
     <div class="products-grid" id="productsGrid"></div>
     <div class="load-more-wrap">
       <button class="btn-secondary" id="loadMoreBtn" onclick="loadMore()">Cargar más productos ↓</button>
@@ -1912,7 +1991,7 @@ footer {
           <div class="contact-item-icon">📧</div>
           <div class="contact-item-text">
             <strong>Correo Electrónico</strong>
-            <span>ventas@volttj.com</span>
+            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7b1814150f1a180f143b0d14170f0f1155181416">[email&#160;protected]</a></span>
           </div>
         </div>
         <div class="contact-item">
@@ -2113,41 +2192,33 @@ footer {
   </div>
 </div>
 
-<script>
-// ── DATA ──
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CONFIG ──
 const COUPONS = { 'VOLT10': 10, 'SOLAR15': 15, 'TJ20': 20, 'BAJA5': 5 };
 const WA_NUM = '526611282417';
-
-const PRODUCTS = [
-  { id:1, name:'Panel Solar 550W Monocristalino PERC', brand:'Canadian Solar', price:3200, oldPrice:3800, category:'Solar', badge:'hot', icon:'☀️', stars:4.8, reviews:124, desc:'Panel de alta eficiencia 21.5%, Half-Cell, frame negro, garantía 25 años rendimiento.' },
-  { id:2, name:'Panel Solar 400W Half-Cell Bifacial', brand:'JA Solar', price:2600, oldPrice:null, category:'Solar', badge:'new', icon:'🌞', stars:4.7, reviews:89, desc:'Tecnología bifacial para mayor generación, ideal para techos con buena reflexión.' },
-  { id:3, name:'Microinversor Enphase IQ8+ 300W', brand:'Enphase', price:4800, oldPrice:5500, category:'Microinversores', badge:'hot', icon:'⚡', stars:5.0, reviews:201, desc:'El microinversor más vendido del mundo. Monitoreo en app Enlighten, garantía 25 años.' },
-  { id:4, name:'Microinversor APsystems DS3-L Dual 800W', brand:'APsystems', price:3900, oldPrice:null, category:'Microinversores', badge:'new', icon:'🔆', stars:4.6, reviews:67, desc:'Controla 2 paneles simultáneamente, instalación plug & play, monitoreo Wi-Fi incluido.' },
-  { id:5, name:'Batería LiFePO4 100Ah 48V', brand:'EG4', price:18500, oldPrice:21000, category:'Baterías', badge:'sale', icon:'🔋', stars:4.9, reviews:45, desc:'5kWh de almacenamiento, 6000+ ciclos, BMS integrado, montaje en rack o pared.' },
-  { id:6, name:'Cámara IP Bullet 4MP IA Hikvision', brand:'Hikvision', price:1450, oldPrice:1800, category:'Seguridad', badge:'sale', icon:'📡', stars:4.8, reviews:312, desc:'Detección de personas y vehículos con IA, visión nocturna 60m, IP67, H.265+.' },
-  { id:7, name:'Cámara Domo PTZ 5MP 25x Zoom', brand:'Dahua', price:4200, oldPrice:null, category:'Seguridad', badge:'new', icon:'🔭', stars:4.7, reviews:78, desc:'Zoom óptico 25x, seguimiento automático de personas, instalación interior/exterior.' },
-  { id:8, name:'NVR 16 Canales 4K Hikvision', brand:'Hikvision', price:5800, oldPrice:6500, category:'Seguridad', badge:'hot', icon:'🖥️', stars:4.9, reviews:156, desc:'16 canales PoE, resolución 4K, HDD 4TB incluido, acceso remoto desde celular.' },
-  { id:9, name:'Inversor Híbrido 5kW 48V MPPT', brand:'Growatt', price:12500, oldPrice:null, category:'Inversores', badge:'new', icon:'🔌', stars:4.8, reviews:93, desc:'Compatible con baterías de litio y plomo, MPPT 80A doble, monitoreo Wi-Fi, cargador AC 60A.' },
-  { id:10, name:'Kit Solar Residencial 3kW Completo', brand:'VoltTJ', price:45900, oldPrice:54000, category:'Solar', badge:'hot', icon:'🌿', stars:5.0, reviews:67, desc:'6 paneles 550W + 6 microinversores Enphase + estructura aluminio + instalación incluida en Tijuana.' },
-  { id:11, name:'Estructura Aluminio Techo Inclinado 4 Paneles', brand:'K2 Systems', price:2200, oldPrice:null, category:'Accesorios', badge:null, icon:'🛠️', stars:4.6, reviews:234, desc:'Aluminio anodizado grado aeroespacial, ajustable 0°-60°, incluye tornillería inoxidable.' },
-  { id:12, name:'Cable Solar 6mm² Rojo+Negro 50m c/u', brand:'Prysmian', price:980, oldPrice:1200, category:'Accesorios', badge:'sale', icon:'🔴', stars:4.7, reviews:445, desc:'Cable certificado TUV, 1500V DC, resistente UV, temperatura -40°C a +90°C.' },
-  { id:13, name:'DVR 8 Canales 4K Turbo HD', brand:'Hikvision', price:3200, oldPrice:null, category:'Seguridad', badge:null, icon:'📹', stars:4.8, reviews:189, desc:'Compatible con cámaras HD-TVI, AHD, CVI y analógicas. App iVMS-4200 gratuita.' },
-  { id:14, name:'Datalogger SolarEdge WEB Se1000', brand:'SolarEdge', price:2800, oldPrice:null, category:'Accesorios', badge:'new', icon:'📊', stars:4.7, reviews:34, desc:'Monitoreo en tiempo real, alertas automáticas, compatible con todos los inversores SolarEdge.' },
-  { id:15, name:'Batería Portátil Solar 200Wh', brand:'Jackery', price:5500, oldPrice:6200, category:'Baterías', badge:'sale', icon:'🔦', stars:4.9, reviews:567, desc:'Estación de energía portátil, carga solar, AC/DC/USB-C. Ideal para camping y emergencias.' },
-  { id:16, name:'Luminaria Solar LED 200W Industrial', brand:'SolarGrow', price:1800, oldPrice:null, category:'Solar', badge:'new', icon:'💡', stars:4.6, reviews:123, desc:'Sensor de movimiento, batería LiFePO4 integrada, hasta 14h de luz, IP65.' },
-];
+// ⚠️ When deploying to Vercel, change this URL to your Vercel URL
+const API_URL = 'https://voltmx-backend.vercel.app';
 
 let cart = [];
 let cartDiscount = 0;
-let visibleCount = 8;
-let currentFilter = 'Todos';
+let currentCatId = '22';
+let currentPage = 1;
+let totalProducts = 0;
 let carouselPos = 0;
 let favs = new Set();
+let syscomProducts = [];
+let isLoading = false;
+
+// ── VARIABLES PARA BÚSQUEDA ──
+let searchResults = [];
+let searchQuery = '';
+let searchPage = 1;
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('footerYear').textContent = new Date().getFullYear();
-  renderProducts();
+  loadCategories();
+  loadProducts(currentCatId, 1);
   setupSearch();
   setupScrollReveal();
   animateCounters();
@@ -2161,110 +2232,560 @@ window.addEventListener('scroll', () => {
   btn.classList.toggle('show', window.scrollY > 300);
 });
 
-// ── PRODUCTS ──
-function renderProducts(filter = 'Todos') {
-  const grid = document.getElementById('productsGrid');
-  let prods = filter === 'Todos' ? PRODUCTS :
-    filter === 'Ofertas' ? PRODUCTS.filter(p => p.badge === 'sale' || p.oldPrice) :
-    PRODUCTS.filter(p => p.category === filter);
+// ── FUNCIÓN PARA MOSTRAR NOTIFICACIONES (TOAST) ──
+function showToast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  
+  let icon = '✅';
+  if (type === 'error') icon = '❌';
+  if (type === 'warning') icon = '⚠️';
+  
+  toast.innerHTML = `<span class="toast-icon">${icon}</span> ${msg}`;
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.add('remove');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
 
-  grid.innerHTML = '';
-  prods.slice(0, visibleCount).forEach(p => {
+// ── FUNCIÓN PRINCIPAL DE BÚSQUEDA ──
+function performSearch(query) {
+  if (query) {
+    searchQuery = query;
+    const searchInput = document.getElementById('searchInputProducts');
+    if (searchInput) searchInput.value = query;
+  } else {
+    const searchInput = document.getElementById('searchInputProducts');
+    if (!searchInput) return;
+    searchQuery = searchInput.value.trim();
+  }
+  
+  if (!searchQuery || searchQuery.length < 2) {
+    showToast('⚠️ Ingresa al menos 2 caracteres para buscar', 'warning');
+    return;
+  }
+  
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+  
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">
+      <div style="font-size:48px;margin-bottom:20px;animation:pulse 1.5s infinite;">🔍</div>
+      <p style="font-size:18px;margin-bottom:10px;">Buscando "${searchQuery}"...</p>
+      <p style="font-size:14px;">Por favor espera</p>
+    </div>
+  `;
+  
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+  
+  searchResults = [];
+  searchPage = 1;
+  
+  fetchSearchResults(searchQuery, 1);
+}
+
+// ── FUNCIÓN PARA OBTENER RESULTADOS DE BÚSQUEDA ──
+async function fetchSearchResults(query, page) {
+  try {
+    const url = `${API_URL}/api/buscar?q=${encodeURIComponent(query)}&pagina=${page}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    if (!data.ok) throw new Error(data.error);
+    
+    const productos = data.productos || [];
+    
+    if (page === 1) {
+      searchResults = productos;
+    } else {
+      searchResults = [...searchResults, ...productos];
+    }
+    
+    displaySearchResults(productos, page === 1, data.total || productos.length);
+    
+  } catch (err) {
+    console.error('Error en búsqueda:', err);
+    const grid = document.getElementById('productsGrid');
+    if (grid) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">
+          <div style="font-size:48px;margin-bottom:20px;">❌</div>
+          <p style="font-size:18px;margin-bottom:10px;">Error en la búsqueda</p>
+          <p style="font-size:14px;">Intenta de nuevo más tarde</p>
+          <button class="btn-primary" style="margin-top:20px;" onclick="loadProducts('22', 1)">Ver todos los productos</button>
+        </div>
+      `;
+    }
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+  }
+}
+
+// ── FUNCIÓN PARA MOSTRAR RESULTADOS ──
+function displaySearchResults(productos, isNewSearch, total) {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+  
+  if (isNewSearch) {
+    grid.innerHTML = '';
+  }
+  
+  if (productos.length === 0 && isNewSearch) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">
+        <div style="font-size:64px;margin-bottom:20px;">🔍</div>
+        <p style="font-size:20px;margin-bottom:10px;">No se encontraron productos para "${searchQuery}"</p>
+        <p style="font-size:14px;margin-bottom:30px;">Intenta con otras palabras</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn-secondary" onclick="performSearch('microinversores')">Buscar Microinversores</button>
+          <button class="btn-secondary" onclick="performSearch('cámaras')">Buscar Cámaras</button>
+          <button class="btn-primary" onclick="loadProducts('22', 1)">Ver todos</button>
+        </div>
+      </div>
+    `;
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+    return;
+  }
+  
+  const sectionTitle = document.querySelector('#productos .section-title');
+  if (sectionTitle && isNewSearch) {
+    sectionTitle.innerHTML = `Resultados para <span class="accent">"${searchQuery}"</span>`;
+    const sectionSub = document.querySelector('#productos .section-sub');
+    if (sectionSub) {
+      sectionSub.innerHTML = `Se encontraron ${total} productos`;
+    }
+  }
+  
+  productos.forEach((p) => {
+    const precio = p.precio_publico || 0;
+    const stock = parseInt(p.total_existencia) || 0;
+    const enStock = stock > 0;
+    const imgUrl = p.img_portada || '';
+    const nombre = (p.titulo || '').replace(/'/g, '&#39;');
+    const marca = (p.marca || '').replace(/'/g, '&#39;');
+    const modelo = p.modelo || '';
+
+    const imgHtml = imgUrl
+      ? `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:contain;padding:8px;" onerror="this.parentElement.innerHTML='<span style=font-size:48px>📦</span>'">`
+      : `<span style="font-size:48px">📦</span>`;
+
     grid.innerHTML += `
-    <div class="product-card reveal" data-cat="${p.category}">
-      ${p.badge ? `<span class="product-badge badge-${p.badge === 'hot' ? 'hot' : p.badge === 'new' ? 'new' : 'sale'}">${p.badge === 'hot' ? '🔥 Más Vendido' : p.badge === 'new' ? '✨ Nuevo' : '💥 Oferta'}</span>` : ''}
-      <div class="product-img" style="background:linear-gradient(135deg, rgba(0,87,255,0.1), rgba(0,212,255,0.05));">
-        <span>${p.icon}</span>
-        <button class="product-fav ${favs.has(p.id)?'active':''}" onclick="toggleFav(${p.id}, this)">♥</button>
+    <div class="product-card reveal" data-id="${p.producto_id}">
+      ${!enStock ? `<span class="product-badge" style="background:#444;color:#aaa;right:12px;">Sin stock</span>` : ''}
+      <div class="product-img" style="background:#0d1a30;">
+        ${imgHtml}
+        <button class="product-fav ${favs && favs.has(p.producto_id) ? 'active' : ''}" onclick="toggleFav('${p.producto_id}', this)">♥</button>
       </div>
       <div class="product-info">
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-stars">
-          ${'★'.repeat(Math.floor(p.stars))}${'☆'.repeat(5-Math.floor(p.stars))}
-          <span>(${p.reviews})</span>
+        <div class="product-brand">${marca}</div>
+        <div class="product-name">${nombre.substring(0, 70)}${nombre.length > 70 ? '...' : ''}</div>
+        ${modelo ? `<div style="font-size:11px;color:var(--gray-400);">Modelo: ${modelo}</div>` : ''}
+        <div style="font-size:11px;color:${enStock ? 'var(--success)' : '#ff6b6b'};margin:8px 0;">
+          ${enStock ? `✅ ${stock} en stock` : '❌ Sin existencia'}
         </div>
         <div class="product-price">
-          <span class="price-current">$${p.price.toLocaleString()} MXN</span>
-          ${p.oldPrice ? `<span class="price-old">$${p.oldPrice.toLocaleString()}</span><span class="price-save">-${Math.round((1-p.price/p.oldPrice)*100)}%</span>` : ''}
+          <span class="price-current">$${precio.toLocaleString('es-MX', {minimumFractionDigits:2})} MXN</span>
         </div>
         <div class="product-actions">
-          <button class="btn-add" onclick="addToCart('${p.name}',${p.price},'${p.icon}','${p.category}')">🛒 Agregar</button>
-          <button class="btn-detail" onclick="showDetail(${p.id})">🔍</button>
+          <button class="btn-add" ${!enStock ? 'disabled style="opacity:0.5"' : ''} 
+            onclick="addToCart('${nombre.substring(0,50).replace(/'/g, "\\'")}',${precio},'${imgUrl}','${marca}')">
+            🛒 ${enStock ? 'Agregar' : 'Sin stock'}
+          </button>
+          <button class="btn-detail" onclick="showSyscomDetail('${p.producto_id}')">🔍</button>
         </div>
       </div>
     </div>`;
   });
-
-  // re-trigger reveals
+  
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  if (loadMoreBtn) {
+    if (productos.length >= 20 && searchResults.length < total) {
+      loadMoreBtn.style.display = 'inline-flex';
+      loadMoreBtn.onclick = () => {
+        searchPage++;
+        fetchSearchResults(searchQuery, searchPage);
+      };
+      loadMoreBtn.innerHTML = `Cargar más (${searchResults.length} de ${total}) ↓`;
+    } else {
+      loadMoreBtn.style.display = 'none';
+    }
+  }
+  
   setTimeout(() => {
     document.querySelectorAll('.reveal').forEach(el => {
       if (el.getBoundingClientRect().top < window.innerHeight + 100) el.classList.add('visible');
     });
   }, 50);
-
-  const loadBtn = document.getElementById('loadMoreBtn');
-  loadBtn.style.display = prods.length > visibleCount ? 'inline-flex' : 'none';
 }
 
-function filterProducts(filter) {
-  currentFilter = filter;
-  visibleCount = 8;
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.includes(filter) || (filter === 'Todos' && btn.textContent === 'Todos'));
+// ── FUNCIÓN PARA SELECCIONAR RESULTADO ──
+function selectSearchResult(productId) {
+  const input = document.getElementById('searchInput');
+  if (input) input.value = '';
+  const dropdown = document.getElementById('searchDropdown');
+  if (dropdown) dropdown.classList.remove('show');
+  showSyscomDetail(productId);
+}
+
+// ── LOAD CATEGORIES FROM API ──
+async function loadCategories() {
+  try {
+    const res = await fetch(`${API_URL}/api/categorias`);
+    const data = await res.json();
+    
+    if (data.ok && data.categorias) {
+      buildFilterButtons(data.categorias);
+    } else {
+      buildFilterButtons([
+        { id: '22', nombre: 'Videovigilancia', icon: '📹' },
+        { id: '26', nombre: 'Redes e IT', icon: '🌐' },
+        { id: '30', nombre: 'Energía', icon: '⚡' },
+        { id: '32', nombre: 'Automatización', icon: '🔒' },
+        { id: '37', nombre: 'Control de Acceso', icon: '🚪' }
+      ]);
+    }
+  } catch (err) {
+    console.error('Error loading categories:', err);
+    buildFilterButtons([
+      { id: '22', nombre: 'Videovigilancia', icon: '📹' },
+      { id: '26', nombre: 'Redes e IT', icon: '🌐' },
+      { id: '30', nombre: 'Energía', icon: '⚡' }
+    ]);
+  }
+}
+
+// ── BUILD FILTER BUTTONS FROM CATEGORIES ──
+function buildFilterButtons(categorias) {
+  const wrap = document.getElementById('productFilters');
+  wrap.innerHTML = `<button class="filter-btn active" onclick="filterProducts('22')">🔥 Todos</button>`;
+  
+  categorias.forEach(c => {
+    wrap.innerHTML += `<button class="filter-btn" onclick="filterProducts('${c.id}')">${c.icon || '📦'} ${c.nombre}</button>`;
   });
-  renderProducts(filter);
+}
+
+// ── LOAD PRODUCTS FROM BACKEND ──
+async function loadProducts(catId, page = 1) {
+  if (isLoading) return;
+  isLoading = true;
+  const grid = document.getElementById('productsGrid');
+  const loadBtn = document.getElementById('loadMoreBtn');
+
+  if (page === 1) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">
+        <div style="font-size:36px;margin-bottom:12px;animation:pulse 1.5s infinite;">⚡</div>
+        <p>Cargando productos desde Syscom...</p>
+      </div>`;
+  }
+
+  try {
+    const url = `${API_URL}/api/productos?categoria=${catId}&pagina=${page}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (!data.ok) throw new Error(data.error);
+
+    syscomProducts = page === 1 ? data.productos : [...syscomProducts, ...data.productos];
+    totalProducts = data.total || 0;
+
+    renderSyscomProducts(syscomProducts);
+
+    loadBtn.style.display = syscomProducts.length < totalProducts ? 'inline-flex' : 'none';
+    currentPage = page;
+
+  } catch (err) {
+    console.error('Error cargando productos:', err);
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">
+        <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
+        <p style="margin-bottom:8px;">Error conectando con el servidor</p>
+        <p style="font-size:12px;">Asegúrate que el backend esté corriendo en localhost:3000</p>
+        <button class="btn-secondary" style="margin-top:16px;" onclick="loadProducts('${catId}',1)">Reintentar</button>
+      </div>`;
+    document.getElementById('loadMoreBtn').style.display = 'none';
+  } finally {
+    isLoading = false;
+  }
+}
+
+// ── RENDER SYSCOM PRODUCTS ──
+function renderSyscomProducts(productos) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+
+  if (!productos.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--gray-400);">Sin productos en esta categoría</div>`;
+    return;
+  }
+
+  productos.forEach((p, idx) => {
+    const precio = p.precio_publico || 0;
+    const stock = parseInt(p.total_existencia) || 0;
+    const enStock = stock > 0;
+    const badge = idx < 3 ? 'hot' : null;
+    const garantia = p.garantia || '';
+    const modelo = p.modelo || '';
+    const imgUrl = p.img_portada || '';
+    const nombre = (p.titulo || '').replace(/'/g, '&#39;');
+    const marca = (p.marca || '').replace(/'/g, '&#39;');
+
+    const imgHtml = imgUrl
+      ? `<img src="${imgUrl}" alt="${nombre}" style="width:100%;height:100%;object-fit:contain;padding:8px;" onerror="this.parentElement.innerHTML='<span style=font-size:48px>📦</span>'">`
+      : `<span style="font-size:48px">📦</span>`;
+
+    grid.innerHTML += `
+    <div class="product-card reveal" data-id="${p.producto_id}">
+      ${badge ? `<span class="product-badge badge-hot">🔥 Destacado</span>` : ''}
+      ${!enStock ? `<span class="product-badge" style="background:#444;color:#aaa;left:auto;right:12px;">Sin stock</span>` : ''}
+      <div class="product-img" style="background:#0d1a30;position:relative;">
+        ${imgHtml}
+        <button class="product-fav ${favs.has(p.producto_id)?'active':''}" onclick="toggleFav('${p.producto_id}', this)">♥</button>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${marca}</div>
+        <div class="product-name">${nombre.substring(0, 70)}${nombre.length > 70 ? '...' : ''}</div>
+        <div style="font-size:11px;color:var(--gray-400);margin-bottom:6px;">
+          ${modelo ? `Modelo: ${modelo}` : ''}
+          ${garantia ? ` · ${garantia}` : ''}
+        </div>
+        <div style="font-size:11px;color:${enStock ? 'var(--success)' : '#ff6b6b'};margin-bottom:8px;font-weight:600;">
+          ${enStock ? `✅ ${stock} en stock` : '❌ Sin existencia'}
+        </div>
+        <div class="product-price">
+          <span class="price-current">$${precio.toLocaleString('es-MX', {minimumFractionDigits:2})} MXN</span>
+        </div>
+        <div class="product-actions">
+          <button class="btn-add" ${!enStock ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''} 
+            onclick="addToCart('${nombre.substring(0,50).replace(/'/g, "\\'")}',${precio},'${imgUrl}','${marca}')">
+            🛒 ${enStock ? 'Agregar' : 'Sin stock'}
+          </button>
+          <button class="btn-detail" onclick="showSyscomDetail('${p.producto_id}')">🔍</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight + 100) el.classList.add('visible');
+    });
+  }, 50);
+}
+
+// ── FILTER PRODUCTS ──
+function filterProducts(catId) {
+  currentCatId = catId;
+  currentPage = 1;
+  syscomProducts = [];
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(`'${catId}'`));
+  });
+  loadProducts(catId, 1);
   document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
 }
 
 function loadMore() {
-  visibleCount += 4;
-  renderProducts(currentFilter);
+  loadProducts(currentCatId, currentPage + 1);
 }
 
-function toggleFav(id, btn) {
-  if (favs.has(id)) { favs.delete(id); btn.classList.remove('active'); showToast('💔 Eliminado de favoritos'); }
-  else { favs.add(id); btn.classList.add('active'); showToast('❤️ Guardado en favoritos'); }
-}
-
-function showDetail(id) {
-  const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('modalTitle').textContent = p.name;
-  document.getElementById('modalBody').innerHTML = `
-    <div style="text-align:center;font-size:72px;margin-bottom:16px;">${p.icon}</div>
-    <div style="font-size:12px;color:var(--blue-light);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">${p.brand}</div>
-    <p style="font-size:14px;color:var(--gray-200);line-height:1.7;margin-bottom:20px;">${p.desc}</p>
-    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:20px;">
-      <span style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--electric);">$${p.price.toLocaleString()} MXN</span>
-      ${p.oldPrice ? `<span style="font-size:14px;color:var(--gray-400);text-decoration:line-through;">$${p.oldPrice.toLocaleString()}</span>` : ''}
-    </div>
-    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="addToCart('${p.name}',${p.price},'${p.icon}','${p.category}');closeModal();">🛒 Agregar al Carrito</button>`;
+// ── SHOW PRODUCT DETAIL ──
+async function showSyscomDetail(sku) {
+  document.getElementById('modalTitle').textContent = 'Cargando...';
+  document.getElementById('modalBody').innerHTML = `<div style="text-align:center;padding:40px;color:var(--gray-400);">⚡ Cargando detalle...</div>`;
   document.getElementById('productModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const res = await fetch(`${API_URL}/api/productos/${sku}`);
+    const data = await res.json();
+    const p = data.producto;
+
+    const nombre = p.titulo || '';
+    const precio = p.precio_publico || 0;
+    const stock = parseInt(p.total_existencia) || 0;
+    const imgUrl = p.img_portada || '';
+    const marca = p.marca || '';
+    const modelo = p.modelo || '';
+    const garantia = p.garantia || 'N/A';
+
+    document.getElementById('modalTitle').textContent = 'Detalle del Producto';
+    document.getElementById('modalBody').innerHTML = `
+      <div style="text-align:center;margin-bottom:16px;background:#0d1a30;border-radius:12px;padding:16px;">
+        ${imgUrl ? `<img src="${imgUrl}" style="max-height:200px;max-width:100%;object-fit:contain;" onerror="this.style.display='none'">` : '<span style="font-size:64px">📦</span>'}
+      </div>
+      <div style="font-size:14px;color:var(--blue-light);font-weight:600;margin-bottom:8px;">${marca} ${modelo ? '· ' + modelo : ''}</div>
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;line-height:1.4;">${nombre}</h3>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="background:rgba(0,87,255,0.08);border-radius:10px;padding:15px;text-align:center;">
+          <div style="font-size:12px;color:var(--gray-400);margin-bottom:5px;">Stock disponible</div>
+          <div style="font-size:24px;font-weight:700;color:${stock>0?'var(--success)':'#ff6b6b'}">${stock > 0 ? stock + ' pzas' : 'Sin stock'}</div>
+        </div>
+        <div style="background:rgba(0,87,255,0.08);border-radius:10px;padding:15px;text-align:center;">
+          <div style="font-size:12px;color:var(--gray-400);margin-bottom:5px;">Garantía</div>
+          <div style="font-size:24px;font-weight:700;color:var(--electric)">${garantia}</div>
+        </div>
+      </div>
+      
+      <div style="background:rgba(0,212,255,0.1);border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
+        <div style="font-size:14px;color:var(--gray-400);margin-bottom:5px;">Precio</div>
+        <div style="font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--electric);">
+          $${precio.toLocaleString('es-MX', {minimumFractionDigits:2})} MXN
+        </div>
+      </div>
+      
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:16px;font-size:16px;" 
+        ${!stock ? 'disabled style="opacity:0.5"' : ''}
+        onclick="addToCart('${nombre.substring(0,50).replace(/'/g,"\\'")}',${precio},'${imgUrl}','${marca}');closeModal();">
+        🛒 ${stock > 0 ? 'Agregar al Carrito' : 'Sin stock'}
+      </button>
+    `;
+  } catch(err) {
+    document.getElementById('modalBody').innerHTML = `<p style="color:#ff6b6b;text-align:center;">Error cargando detalle</p>`;
+  }
 }
 
-function closeModal() { document.getElementById('productModal').classList.remove('show'); }
-document.getElementById('productModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+// ── CLOSE MODAL FUNCTION ──
+function closeModal() { 
+  document.getElementById('productModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
 
-// ── CART ──
-function addToCart(name, price, icon, cat) {
+document.getElementById('productModal').addEventListener('click', function(e) { 
+  if (e.target === this) closeModal(); 
+});
+
+// ── SEARCH IMPROVED ──
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  const dropdown = document.getElementById('searchDropdown');
+  let searchTimer;
+  let lastQuery = '';
+
+  if (!input) return;
+
+  dropdown.style.maxHeight = '400px';
+  dropdown.style.overflowY = 'auto';
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    clearTimeout(searchTimer);
+    
+    if (!q || q.length < 2) { 
+      dropdown.classList.remove('show'); 
+      return; 
+    }
+
+    dropdown.innerHTML = `<div class="search-result-item" style="cursor:default;color:var(--gray-400);">🔍 Buscando "${q}"...</div>`;
+    dropdown.classList.add('show');
+
+    searchTimer = setTimeout(async () => {
+      if (q === lastQuery) return;
+      lastQuery = q;
+
+      try {
+        const res = await fetch(`${API_URL}/api/buscar?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        
+        if (!data.ok) throw new Error(data.error);
+        
+        const results = data.productos || [];
+
+        if (results.length > 0) {
+          dropdown.innerHTML = results.map(p => {
+            const img = p.img_portada || '';
+            const titulo = (p.titulo || '').substring(0, 60);
+            const precio = p.precio_publico || 0;
+            const id = p.producto_id;
+            const marca = p.marca || '';
+            const stock = parseInt(p.total_existencia) || 0;
+            
+            return `
+              <div class="search-result-item" onclick="selectSearchResult('${id}')">
+                <div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#0d1a30;border-radius:6px;">
+                  ${img ? `<img src="${img}" style="max-width:35px;max-height:35px;object-fit:contain;">` : '📦'}
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13px;font-weight:500;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${titulo}</div>
+                  <div style="display:flex;gap:8px;font-size:11px;color:var(--gray-400);margin-top:2px;">
+                    <span>${marca || 'Genérico'}</span>
+                    <span style="color:${stock>0?'var(--success)':'#ff6b6b'}">${stock>0?'✓ Stock':'✗ Agotado'}</span>
+                  </div>
+                </div>
+                <div style="color:var(--electric);font-size:13px;font-weight:600;white-space:nowrap;">$${precio.toLocaleString('es-MX', {minimumFractionDigits:2})}</div>
+              </div>`;
+          }).join('');
+          
+          dropdown.innerHTML += `<div style="padding:8px 12px;font-size:11px;color:var(--gray-400);text-align:center;border-top:1px solid rgba(255,255,255,0.05);">
+            ${results.length} productos encontrados
+          </div>`;
+          
+          dropdown.classList.add('show');
+        } else {
+          dropdown.innerHTML = `
+            <div class="search-result-item" style="cursor:default;color:var(--gray-400);flex-direction:column;padding:20px;">
+              <div style="font-size:24px;margin-bottom:8px;">🔍</div>
+              <div>No se encontraron productos para "${q}"</div>
+              <div style="font-size:11px;margin-top:8px;">Intenta con otras palabras</div>
+            </div>`;
+          dropdown.classList.add('show');
+        }
+      } catch(err) {
+        console.error('Search error:', err);
+        dropdown.innerHTML = `<div class="search-result-item" style="cursor:default;color:#ff6b6b;">Error al buscar</div>`;
+        dropdown.classList.add('show');
+      }
+    }, 300);
+  });
+
+  document.addEventListener('click', (e) => { 
+    if (!e.target.closest('.search-wrap')) {
+      dropdown.classList.remove('show');
+      lastQuery = '';
+    }
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdown.classList.remove('show');
+      lastQuery = '';
+    }
+  });
+}
+
+// ── FUNCTIONS FOR TOGGLE FAV ──
+function toggleFav(id, btn) {
+  if (favs.has(id)) { 
+    favs.delete(id); 
+    btn.classList.remove('active'); 
+    showToast('💔 Eliminado de favoritos');
+  } else { 
+    favs.add(id); 
+    btn.classList.add('active'); 
+    showToast('❤️ Guardado en favoritos');
+  }
+}
+
+// ── CART FUNCTIONS ──
+function addToCart(name, price, imgUrl, cat) {
   const ex = cart.find(i => i.name === name);
   if (ex) ex.qty++;
-  else cart.push({ name, price, icon, cat, qty: 1 });
+  else cart.push({ name, price, imgUrl, cat, qty: 1 });
   updateCartUI();
   openCart();
-  showToast(`✅ ${name.substring(0,30)}... agregado al carrito`);
+  showToast(`✅ ${name.substring(0,30)}... agregado`);
 }
 
-function removeFromCart(idx) {
-  cart.splice(idx, 1);
-  updateCartUI();
-}
-
-function changeQty(idx, delta) {
-  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
-  updateCartUI();
-}
+function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
+function changeQty(idx, delta) { cart[idx].qty = Math.max(1, cart[idx].qty + delta); updateCartUI(); }
 
 function updateCartUI() {
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
@@ -2285,8 +2806,11 @@ function updateCartUI() {
     cart.forEach((item, idx) => {
       const el = document.createElement('div');
       el.className = 'cart-item';
+      const imgHtml = item.imgUrl && item.imgUrl.startsWith('http')
+        ? `<img src="${item.imgUrl}" style="width:100%;height:100%;object-fit:contain;padding:4px;" onerror="this.style.display='none'">`
+        : `<span style="font-size:28px">📦</span>`;
       el.innerHTML = `
-        <div class="cart-item-img">${item.icon}</div>
+        <div class="cart-item-img">${imgHtml}</div>
         <div class="cart-item-info">
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-brand">${item.cat}</div>
@@ -2297,7 +2821,7 @@ function updateCartUI() {
           </div>
         </div>
         <div class="cart-item-right">
-          <span class="cart-item-price">$${(item.price*item.qty).toLocaleString()}</span>
+          <span class="cart-item-price">$${(item.price*item.qty).toLocaleString('es-MX',{minimumFractionDigits:2})}</span>
           <button class="cart-item-remove" onclick="removeFromCart(${idx})">🗑️</button>
         </div>`;
       itemsEl.appendChild(el);
@@ -2306,8 +2830,8 @@ function updateCartUI() {
 
   const disc = total * cartDiscount / 100;
   const finalTotal = total - disc;
-  document.getElementById('cartSubtotal').textContent = `$${total.toLocaleString()} MXN`;
-  document.getElementById('cartTotal').textContent = `$${Math.round(finalTotal).toLocaleString()} MXN`;
+  document.getElementById('cartSubtotal').textContent = `$${total.toLocaleString('es-MX',{minimumFractionDigits:2})} MXN`;
+  document.getElementById('cartTotal').textContent = `$${Math.round(finalTotal).toLocaleString('es-MX',{minimumFractionDigits:2})} MXN`;
   document.getElementById('cartShipping').textContent = total > 3000 ? '✅ Gratis' : 'A cotizar';
   const discRow = document.getElementById('discountRow');
   discRow.style.display = cartDiscount > 0 ? 'flex' : 'none';
@@ -2345,138 +2869,18 @@ function checkout() {
   const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
   const disc = total * cartDiscount / 100;
   let msg = `🛒 *Pedido VoltTJ*\n\n`;
-  cart.forEach(i => { msg += `• ${i.name} x${i.qty} = $${(i.price*i.qty).toLocaleString()} MXN\n`; });
-  msg += `\n💰 *Total: $${Math.round(total-disc).toLocaleString()} MXN*`;
+  cart.forEach(i => { msg += `• ${i.name} x${i.qty} = $${(i.price*i.qty).toLocaleString('es-MX',{minimumFractionDigits:2})} MXN\n`; });
+  msg += `\n💰 *Total: $${Math.round(total-disc).toLocaleString('es-MX',{minimumFractionDigits:2})} MXN*`;
   if (cartDiscount > 0) msg += ` (descuento ${cartDiscount}% aplicado)`;
   msg += `\n\n¡Hola! Quiero finalizar este pedido. ¿Me pueden ayudar?`;
   window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
-// ── CALCULATOR ──
-function updateRangeStyle() {
-  const r = document.getElementById('recibo');
-  if (!r) return;
-  const pct = ((r.value - r.min) / (r.max - r.min)) * 100;
-  r.style.setProperty('--pct', pct + '%');
-}
-
-function updateCalc() {
-  updateRangeStyle();
-  const recibo = parseInt(document.getElementById('recibo').value) || 3000;
-  const estado = document.getElementById('estadoCalc').value;
-  document.getElementById('reciboVal').textContent = `$${recibo.toLocaleString()} MXN / mes`;
-
-  const irradiance = estado === 'bc' ? 5.8 : estado === 'sonora' ? 6.0 : estado === 'nl' ? 5.2 : 5.0;
-  const tarifaKwh = 1.8;
-  const kwh = recibo / tarifaKwh;
-  const paneles = Math.ceil(kwh / (irradiance * 0.55 * 30));
-  const ahorro = Math.min(recibo * 0.85, recibo);
-  const inversion = paneles * 7500;
-  const retorno = (inversion / (ahorro * 12)).toFixed(1);
-  const co2 = (kwh * 12 * 0.000454).toFixed(1);
-
-  document.getElementById('rPaneles').textContent = paneles;
-  document.getElementById('rAhorro').textContent = `$${Math.round(ahorro).toLocaleString()}`;
-  document.getElementById('rRetorno').textContent = retorno;
-  document.getElementById('rCo2').textContent = co2 + 't';
-  document.getElementById('rInversion').textContent = `$${inversion.toLocaleString()} MXN`;
-}
-document.getElementById('recibo').addEventListener('input', updateCalc);
-
-// ── SEARCH ──
-function setupSearch() {
-  const input = document.getElementById('searchInput');
-  const dropdown = document.getElementById('searchDropdown');
-  input.addEventListener('input', () => {
-    const q = input.value.toLowerCase().trim();
-    if (!q) { dropdown.classList.remove('show'); return; }
-    const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)).slice(0,5);
-    dropdown.innerHTML = results.length
-      ? results.map(p => `<div class="search-result-item" onclick="selectSearchResult('${p.name}',${p.id})">${p.icon} ${p.name} <span style="margin-left:auto;font-size:11px;color:var(--blue-light);">$${p.price.toLocaleString()}</span></div>`).join('')
-      : `<div class="search-result-item" style="cursor:default;color:var(--gray-400);">Sin resultados para "${q}"</div>`;
-    dropdown.classList.add('show');
-  });
-  document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) dropdown.classList.remove('show'); });
-}
-
-function selectSearchResult(name, id) {
-  document.getElementById('searchInput').value = name;
-  document.getElementById('searchDropdown').classList.remove('show');
-  showDetail(id);
-}
-
-// ── FORM ──
-function submitForm() {
-  let valid = true;
-  const fields = [
-    { id: 'fNombre', check: v => v.length > 1 },
-    { id: 'fTel', check: v => v.replace(/\D/g,'').length >= 10 },
-    { id: 'fEmail', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
-  ];
-  fields.forEach(f => {
-    const el = document.getElementById(f.id);
-    const g = el.closest('.form-group');
-    if (!f.check(el.value)) { g.classList.add('error'); valid = false; }
-    else g.classList.remove('error');
-    el.addEventListener('input', () => { if (f.check(el.value)) g.classList.remove('error'); }, { once: false });
-  });
-  if (!valid) { showToast('⚠️ Por favor completa los campos requeridos'); return; }
-
-  const nombre = document.getElementById('fNombre').value;
-  const tel = document.getElementById('fTel').value;
-  const email = document.getElementById('fEmail').value;
-  const tipo = document.getElementById('fTipo').value;
-  const consumo = document.getElementById('fConsumo').value;
-  const msg = document.getElementById('fMensaje').value;
-
-  const wa = `🚀 *Nueva Solicitud de Cotización — VoltTJ*\n\n👤 *Nombre:* ${nombre}\n📱 *Teléfono:* ${tel}\n📧 *Email:* ${email}\n🏗️ *Proyecto:* ${tipo || 'No especificado'}\n⚡ *Consumo:* ${consumo || 'No especificado'}\n📝 *Mensaje:* ${msg || 'Sin mensaje adicional'}`;
-  window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(wa)}`, '_blank');
-  showToast('✅ ¡Solicitud enviada! Te redirigimos a WhatsApp.');
-}
-
-// ── CAROUSEL ──
-function moveCarousel(dir) {
-  const track = document.getElementById('testimonialsTrack');
-  const cards = track.querySelectorAll('.testimonial-card');
-  const maxPos = Math.max(0, cards.length - getVisibleCards());
-  carouselPos = Math.max(0, Math.min(maxPos, carouselPos + dir));
-  track.style.transform = `translateX(-${carouselPos * 360}px)`;
-}
-
-function getVisibleCards() {
-  return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
-}
-
-function startCarousel() {
-  setInterval(() => {
-    const track = document.getElementById('testimonialsTrack');
-    const cards = track.querySelectorAll('.testimonial-card');
-    const maxPos = cards.length - getVisibleCards();
-    carouselPos = carouselPos >= maxPos ? 0 : carouselPos + 1;
-    track.style.transform = `translateX(-${carouselPos * 360}px)`;
-  }, 4000);
-}
-
-// ── MOBILE NAV ──
-document.getElementById('hamburgerBtn').addEventListener('click', () => {
-  document.getElementById('mobileNav').classList.add('open');
-  document.getElementById('mobileOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
-});
-function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileOverlay').classList.remove('show');
-  document.body.style.overflow = '';
 }
 
 // ── SCROLL REVEAL ──
 function setupScrollReveal() {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 60);
-        obs.unobserve(e.target);
-      }
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 60); obs.unobserve(e.target); }
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
@@ -2488,13 +2892,8 @@ function animateCounters() {
   const obs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
       targets.forEach(t => {
-        let start = 0;
-        const step = Math.ceil(t.val / 60);
-        const timer = setInterval(() => {
-          start = Math.min(start + step, t.val);
-          document.getElementById(t.id).textContent = start;
-          if (start >= t.val) clearInterval(timer);
-        }, 25);
+        let start = 0; const step = Math.ceil(t.val/60);
+        const timer = setInterval(() => { start = Math.min(start+step, t.val); const el = document.getElementById(t.id); if(el) el.textContent=start; if(start>=t.val) clearInterval(timer); }, 25);
       });
       obs.disconnect();
     }
@@ -2503,29 +2902,75 @@ function animateCounters() {
   if (hero) obs.observe(hero);
 }
 
-// ── TOAST ──
-function showToast(msg) {
-  const c = document.getElementById('toastContainer');
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.innerHTML = `<span class="toast-icon">⚡</span> ${msg}`;
-  c.appendChild(t);
-  setTimeout(() => {
-    t.classList.add('remove');
-    setTimeout(() => t.remove(), 300);
-  }, 3000);
+// ── CAROUSEL ──
+function startCarousel() {
+  setInterval(() => {
+    const track = document.getElementById('testimonialsTrack');
+    if (!track) return;
+    const cards = track.querySelectorAll('.testimonial-card');
+    const visible = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+    carouselPos = carouselPos >= (cards.length - visible) ? 0 : carouselPos + 1;
+    track.style.transform = `translateX(-${carouselPos * 360}px)`;
+  }, 4000);
+}
+
+function moveCarousel(dir) {
+  const track = document.getElementById('testimonialsTrack');
+  if (!track) return;
+  const cards = track.querySelectorAll('.testimonial-card');
+  const visible = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+  carouselPos = Math.max(0, Math.min(cards.length - visible, carouselPos + dir));
+  track.style.transform = `translateX(-${carouselPos * 360}px)`;
+}
+
+// ── CALC ──
+function updateCalc() {
+  const recibo = parseFloat(document.getElementById('recibo')?.value) || 3000;
+  const tipo = document.getElementById('tipoInstalacion')?.value || 'residencial';
+  const factor = tipo === 'residencial' ? 0.9 : tipo === 'comercial' ? 0.85 : 0.8;
+  const kwh = recibo / 3.5;
+  const paneles = Math.ceil(kwh / (30 * 5 * 0.8));
+  const ahorro = recibo * factor;
+  const inversion = paneles * 8500;
+  const payback = (inversion / (ahorro * 12)).toFixed(1);
+  
+  document.getElementById('rPaneles').textContent = paneles;
+  document.getElementById('rAhorro').textContent = '$' + Math.round(ahorro).toLocaleString();
+  document.getElementById('rRetorno').textContent = payback;
+  document.getElementById('rInversion').textContent = '$' + inversion.toLocaleString() + ' MXN';
+  
+  updateRangeStyle();
+}
+
+function updateRangeStyle() {
+  const r = document.getElementById('recibo');
+  if (!r) return;
+  const pct = ((r.value - r.min) / (r.max - r.min)) * 100;
+  r.style.background = `linear-gradient(to right, var(--blue) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+  document.getElementById('reciboVal').textContent = '$' + parseInt(r.value).toLocaleString() + ' MXN / mes';
 }
 
 // ── NEWSLETTER ──
 function subscribeNewsletter() {
-  const v = document.getElementById('newsletterEmail').value;
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-    showToast('📧 ¡Suscrito exitosamente!');
-    document.getElementById('newsletterEmail').value = '';
-  } else {
-    showToast('⚠️ Ingresa un correo válido');
-  }
+  const v = document.getElementById('newsletterEmail')?.value;
+  if (!v || !v.includes('@')) { showToast('⚠️ Ingresa un email válido', 'warning'); return; }
+  showToast('✅ ¡Suscrito! Recibirás nuestras ofertas.');
+  document.getElementById('newsletterEmail').value = '';
 }
-</script>
-</body>
-</html>
+
+// ── MOBILE NAV ──
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('hamburgerBtn').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.getElementById('mobileOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+});
+
+// ── FORM SUBMIT ──
+function submitForm() {
+  showT
